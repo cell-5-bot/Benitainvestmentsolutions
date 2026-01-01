@@ -8764,6 +8764,61 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
       onload="window.tti.calculateTTI()"
     ></script>
 
+  
+<script>
+(function(){
+  // Ensure initial state (show open, hide closed)
+  function initToggles(){
+    document.querySelectorAll('.et_pb_toggle').forEach(function(t){
+      var content = t.querySelector('.et_pb_toggle_content');
+      if (!content) return;
+      if (t.classList.contains('et_pb_toggle_open')) {
+        content.style.display = 'block';
+        t.setAttribute('aria-expanded','true');
+      } else {
+        content.style.display = 'none';
+        t.setAttribute('aria-expanded','false');
+      }
+    });
+  }
+
+  // Toggle a single accordion item
+  function toggleItem(titleEl){
+    var toggle = titleEl.closest('.et_pb_toggle');
+    if (!toggle) return;
+    var content = toggle.querySelector('.et_pb_toggle_content');
+    var isOpen = toggle.classList.contains('et_pb_toggle_open');
+
+    if (isOpen) {
+      toggle.classList.remove('et_pb_toggle_open');
+      toggle.classList.add('et_pb_toggle_close');
+      if (content) content.style.display = 'none';
+      toggle.setAttribute('aria-expanded','false');
+    } else {
+      toggle.classList.remove('et_pb_toggle_close');
+      toggle.classList.add('et_pb_toggle_open');
+      if (content) content.style.display = 'block';
+      toggle.setAttribute('aria-expanded','true');
+    }
+  }
+
+  // Delegated click handler for titles / plus icons
+  document.addEventListener('click', function(e){
+    var title = e.target.closest('.et_pb_toggle_title, .et_pb_toggle .et_pb_toggle_title');
+    if (!title) return;
+    e.preventDefault();
+    toggleItem(title);
+  }, true);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initToggles);
+  } else {
+    initToggles();
+  }
+})();
+</script>
+
+
     <span class="et_pb_scroll_top et-pb-icon et-hidden"></span>
   </body>
 </html>
